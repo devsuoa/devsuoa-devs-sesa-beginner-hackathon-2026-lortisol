@@ -104,7 +104,7 @@ export default function App() {
 {/* Top navbar */}
 <div className="fixed top-0 left-0 right-0 flex items-center justify-end px-6 py-4">
  
-  <span className="absolute left-1/2 -translate-x-1/2 translate-y-35 font-[Orbitron] text-6xl text-white font-bold tracking-widest">
+  <span className="absolute left-1/2 -translate-x-1/2 translate-y-15 font-[Orbitron] text-6xl text-white font-bold tracking-widest">
     Spaced In
   </span>
 
