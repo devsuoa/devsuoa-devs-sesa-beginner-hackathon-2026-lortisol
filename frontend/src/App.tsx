@@ -12,17 +12,12 @@ function App() {
   }, [])
 
   return (
-    <div style={{ padding: '2rem', fontFamily: 'sans-serif' }}>
+    <div className="p-2 font-[Orbitron] text-3xl bg-amber-400">
       <h1>Project Template</h1>
-      <div style={{ 
-        padding: '1rem', 
-        background: status.includes('Failed') ? '#fee2e2' : '#dcfce7',
-        borderRadius: '8px' 
-      }}>
+      
         <p style={{color:'black'}}>
         Backend Status: <strong>{status}</strong>
         </p>
-      </div>
     </div>
   )
 }
