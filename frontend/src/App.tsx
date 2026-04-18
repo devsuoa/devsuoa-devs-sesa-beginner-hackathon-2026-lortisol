@@ -1,5 +1,8 @@
-import { useState, useRef } from "react"
+import { useState, useRef, useEffect, useMemo } from "react"
 import "./index.css"
+import { BsPerson } from "react-icons/bs";
+import { IoSettingsOutline } from "react-icons/io5"
+import { IoPlanetOutline } from "react-icons/io5";
 
 export default function App() {
   const [isVisible, setIsVisible] = useState(false)
@@ -10,6 +13,50 @@ export default function App() {
   const [finished, setFinished] = useState(false)
   const sourceRef = useRef<EventSource | null>(null)
   const remainingRef = useRef(25 * 60)
+
+  const planetImages = useMemo(() => [
+    "/frame0.png",
+    "/frame1.png",
+    "/frame2.png",
+    "/frame3.png",
+    "/frame4.png",
+    "/frame5.png",
+    "/frame6.png",
+    "/frame7.png",
+    "/frame8.png",
+  ], [])
+
+  const [planetIndex, setPlanetIndex] = useState(0)
+  const [spinSpeed, setSpinSpeed] = useState(500) // 0.5s default
+  const clickTimeoutRef = useRef<number | null>(null)
+
+  useEffect(() => {
+    const interval = window.setInterval(() => {
+      setPlanetIndex((prev) => (prev + 1) % planetImages.length)
+    }, spinSpeed)
+
+    return () => window.clearInterval(interval)
+  }, [spinSpeed, planetImages.length])
+
+  function handlePlanetClick() {
+    setSpinSpeed(100) // speed up
+
+    if (clickTimeoutRef.current) {
+      window.clearTimeout(clickTimeoutRef.current)
+    }
+
+    clickTimeoutRef.current = window.setTimeout(() => {
+      setSpinSpeed(500) // back to normal
+    }, 1200)
+  }
+
+  useEffect(() => {
+    return () => {
+      if (clickTimeoutRef.current) {
+        window.clearTimeout(clickTimeoutRef.current)
+      }
+    }
+  }, [])
 
   function startTimer() {
     if (running) return
@@ -57,29 +104,63 @@ export default function App() {
 
   return (  
     <>  
-      {/* Top navbar */}
-      <div className="fixed top-0 left-0 right-0 flex items-center justify-between px-6 py-4">
-        <span className="font-[Orbitron] text-xl text-white tracking-widest">
-          Project Template
-        </span>
 
-        <div className="flex gap-3">
-          <button className="btn-end" title="Solar System">
-            <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
-              <circle cx="12" cy="12" r="10" />
-            </svg>
-          </button>
-          <button className="btn-end" title="Profile">
-            <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
-              <circle cx="12" cy="12" r="10" />
-            </svg>
-          </button>
-          <button className="btn-end" title="Settings">
-            <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
-              <circle cx="12" cy="12" r="10" />
-            </svg>
-          </button>
-        </div>
+{/* Top navbar */}
+<div className="fixed top-0 left-0 right-0 flex items-center justify-end px-6 py-4">
+ 
+  <span className="absolute left-1/2 -translate-x-1/2 translate-y-15 font-[Orbitron] text-6xl text-white font-bold tracking-widest">
+    Spaced In
+  </span>
+
+  <div className="flex gap-3">
+
+  <button className="btn-icon" title="Solar System">
+    <IoPlanetOutline size={47}/>
+  </button>
+
+  <button className="btn-icon" title="Profile">
+    <BsPerson size={47}/>
+  </button>
+
+  <button className="btn-icon" title="Settings">
+    <IoSettingsOutline size={47}/>
+  </button>
+
+  </div>
+</div>
+
+<div className="container">
+      <div className="planet-wrapper" onClick={handlePlanetClick}>
+        <img
+          src={planetImages[planetIndex]}
+          width="400"
+          height="400"
+          alt="Spinning planet"
+          className="planet-image"
+          draggable={false}
+        />
+      </div>
+      <div className="timer">{display}</div>
+
+      <div className="minutes-row">
+        <label>Minutes</label>
+        <input
+          type="number"
+          value={minutes}
+          min={1}
+          max={120}
+          onChange={(e) => {
+            const val = parseInt(e.target.value)
+            setMinutes(val)
+            if (!running) {
+              const total = val * 60
+              remainingRef.current = total
+              setRemaining(total)
+              setDisplay(`${String(val).padStart(2, "0")}:00`)
+            }
+          }}
+          disabled={running}
+        />
       </div>
 
       <div className="flex flex-col items-center justify-end h-screen pb-20 overflow-hidden">
