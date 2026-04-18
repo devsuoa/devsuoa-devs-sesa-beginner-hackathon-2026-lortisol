@@ -52,8 +52,41 @@ export default function App() {
     setFinished(false)
   }
 
-  return (
+  return (  
+    <>  
+{/* Top navbar */}
+<div className="fixed top-0 left-0 right-0 flex items-center justify-between px-6 py-4">
+ 
+  <span className="font-[Orbitron] text-xl text-white tracking-widest">
+    Project Template
+  </span>
+
+  <div className="flex gap-3">
+
+    <button className="btn-end" title="Solar System">
+      {/* swap in whatever icon/label you want */}
+      <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
+        <circle cx="12" cy="12" r="10" />
+      </svg>
+    </button>
+
+    <button className="btn-end" title="Profile">
+      <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
+        <circle cx="12" cy="12" r="10" />
+      </svg>
+    </button>
+
+    <button className="btn-end" title="Settings">
+      <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
+        <circle cx="12" cy="12" r="10" />
+      </svg>
+    </button>
+
+  </div>
+</div>
+
 <div className="container">
+
       <div className="timer">{display}</div>
 
       <div className="minutes-row">
@@ -80,30 +113,28 @@ export default function App() {
       {finished && <p className="message">Mission complete.</p>}
 
       <div className="buttons">
+        
         <button onClick={startTimer} disabled={running} className="btn-start" title="Start">
           <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
             <polygon points="5,3 19,12 5,21" />
           </svg>
         </button>
+        
         <button onClick={pauseTimer} disabled={!running} className="btn-stop" title="Pause">
           <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
             <rect x="5" y="3" width="4" height="18" />
             <rect x="15" y="3" width="4" height="18" />
           </svg>
         </button>
+        
         <button onClick={endSession} className="btn-end" title="End Session">
           <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
             <rect x="4" y="4" width="16" height="16" />
           </svg>
         </button>
+
       </div>
-    <div className="p-2 font-[Orbitron] text-3xl bg-amber-400">
-      <h1>Project Template</h1>
-      
-        <p style={{color:'black'}}>
-        Backend Status: <strong>{status}</strong>
-        </p>
-    </div>
   </div>
+  </>
   )
 }
