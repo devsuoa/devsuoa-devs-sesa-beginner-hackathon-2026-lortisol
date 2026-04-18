@@ -6,7 +6,7 @@ html, body, #root {
   width: 100%;
   margin: 0;
   padding: 0;
-  overflow: hidden; /* This kills the scroll globally */
+  overflow: auto; /* This kills the scroll globally */
 }
 
 body {
@@ -16,7 +16,6 @@ body {
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  padding-bottom: 4rem;
 }
 
 .container {
@@ -132,6 +131,7 @@ button:disabled { opacity: 0.3; cursor: not-allowed; }
   opacity: 0.7;
 }
 
+/* Mode picker */
 .mode-btn {
   font-family: 'Orbitron', monospace;
   font-size: 0.85rem;
@@ -146,7 +146,6 @@ button:disabled { opacity: 0.3; cursor: not-allowed; }
   cursor: pointer;
   transition: all 0.3s;
 }
-
 .mode-btn:hover {
   background: rgba(74,158,255,0.15);
   border-color: #4a9eff;
@@ -154,8 +153,150 @@ button:disabled { opacity: 0.3; cursor: not-allowed; }
   color: #ffffff;
 }
 
+/* Pomodoro config */
+.pom-config-grid {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.pom-config-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  background: rgba(74,158,255,0.04);
+  border: 1px solid rgba(74,158,255,0.2);
+  border-radius: 12px;
+  padding: 20px 28px;
+}
+.pom-config-label {
+  font-family: 'Orbitron', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.3em;
+  color: #4a9eff;
+}
+.pom-config-controls {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.pom-config-value {
+  font-family: 'Orbitron', monospace;
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: #ffffff;
+  min-width: 60px;
+  text-align: center;
+}
+.pom-config-unit {
+  font-family: 'Orbitron', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  color: rgba(74,158,255,0.5);
+}
+.pom-adj-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid rgba(74,158,255,0.4);
+  background: transparent;
+  color: #4a9eff;
+  font-size: 1.3rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.pom-adj-btn:hover {
+  background: rgba(74,158,255,0.15);
+  box-shadow: 0 0 12px rgba(74,158,255,0.3);
+  color: #ffffff;
+}
+.pom-config-divider {
+  font-family: 'Orbitron', monospace;
+  font-size: 2rem;
+  color: rgba(74,158,255,0.3);
+}
+
+/* Pomodoro runtime */
+.phase-badge {
+  font-family: 'Orbitron', monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.4em;
+  padding: 6px 20px;
+  border-radius: 99px;
+  transition: all 0.5s;
+}
+.phase-study {
+  color: #4a9eff;
+  border: 1px solid rgba(74,158,255,0.5);
+  box-shadow: 0 0 16px rgba(74,158,255,0.2);
+}
+.phase-rest {
+  color: #34d399;
+  border: 1px solid rgba(52,211,153,0.5);
+  box-shadow: 0 0 16px rgba(52,211,153,0.2);
+}
+.cycles-label {
+  font-family: 'Orbitron', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.3em;
+  color: rgba(255,255,255,0.3);
+}
+.pom-phase-bar {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+.pom-phase-segment {
+  font-family: 'Orbitron', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  padding: 4px 14px;
+  border-radius: 99px;
+  border: 1px solid rgba(255,255,255,0.1);
+  color: rgba(255,255,255,0.2);
+  transition: all 0.5s;
+}
+.active-study {
+  color: #4a9eff;
+  border-color: rgba(74,158,255,0.5);
+  background: rgba(74,158,255,0.08);
+}
+.active-rest {
+  color: #34d399;
+  border-color: rgba(52,211,153,0.5);
+  background: rgba(52,211,153,0.08);
+}
+
+/* Stopwatch reset button */
 .btn-reset {
   border-color: #a855f7;
   color: #a855f7;
   box-shadow: 0 0 10px rgba(168,85,247,0.5);
+}
+
+.pom-config-value-input {
+  font-family: 'Orbitron', monospace;
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: #ffffff;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(74,158,255,0.4);
+  border-radius: 0;
+  width: 80px;
+  text-align: center;
+  outline: none;
+  padding: 0 4px;
+  -moz-appearance: textfield;
+}
+.pom-config-value-input::-webkit-outer-spin-button,
+.pom-config-value-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+.pom-config-value-input:focus {
+  border-bottom-color: #4a9eff;
+  box-shadow: 0 4px 8px -4px rgba(74,158,255,0.4);
 }

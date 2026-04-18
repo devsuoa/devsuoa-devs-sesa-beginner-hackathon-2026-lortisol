@@ -5,24 +5,33 @@ import { IoSettingsOutline } from "react-icons/io5"
 import { IoPlanetOutline } from "react-icons/io5"
 
 type Mode = "stopwatch" | "pomodoro" | null
+type Phase = "study" | "rest"
 
 export default function App() {
   const [isVisible, setIsVisible] = useState(false)
   const [mode, setMode] = useState<Mode>(null)
 
-  // Pomodoro state
-  const [minutes, setMinutes] = useState(25)
+  // Pomodoro config
+  const [pomConfigured, setPomConfigured] = useState(false)
+  const [studyMinutes, setStudyMinutes] = useState(25)
+  const [restMinutes, setRestMinutes] = useState(5)
+
+  // Pomodoro runtime
+  const [phase, setPhase] = useState<Phase>("study")
   const [display, setDisplay] = useState("25:00")
   const [, setRemaining] = useState(25 * 60)
   const [running, setRunning] = useState(false)
-  const [finished, setFinished] = useState(false)
+  const [cycleCount, setCycleCount] = useState(0)
   const sourceRef = useRef<EventSource | null>(null)
   const remainingRef = useRef(25 * 60)
+  const phaseRef = useRef<Phase>("study")
+  const studyRef = useRef(25)
+  const restRef = useRef(5)
 
   // Stopwatch state
   const [swDisplay, setSwDisplay] = useState("00:00:00")
   const [swRunning, setSwRunning] = useState(false)
-  const swRef = useRef(0)           // elapsed seconds
+  const swRef = useRef(0)
   const swIntervalRef = useRef<number | null>(null)
 
   // Planet animation
@@ -55,19 +64,43 @@ export default function App() {
   }, [])
 
   // ── Pomodoro ──────────────────────────────────────────────
-  function startTimer() {
-    if (running) return
+
+  function startPhase(seconds: number) {
+    if (sourceRef.current) {
+      sourceRef.current.close()
+      sourceRef.current = null
+    }
     setRunning(true)
-    setFinished(false)
-    const source = new EventSource(`http://127.0.0.1:8000/timer/${remainingRef.current}`)
+    remainingRef.current = seconds
+
+    const source = new EventSource(`http://127.0.0.1:8000/timer/${seconds}`)
     sourceRef.current = source
+
     source.onmessage = (e) => {
       if (e.data === "DONE") {
-        setDisplay("00:00")
-        setFinished(true)
-        setRunning(false)
-        remainingRef.current = 0
         source.close()
+        sourceRef.current = null
+        setRunning(false)
+
+        // Flip phase
+        const nextPhase: Phase = phaseRef.current === "study" ? "rest" : "study"
+        phaseRef.current = nextPhase
+        setPhase(nextPhase)
+
+        if (nextPhase === "rest") {
+          setCycleCount((c) => c + 1)
+          const restSecs = restRef.current * 60
+          remainingRef.current = restSecs
+          setRemaining(restSecs)
+          setDisplay(`${String(restRef.current).padStart(2, "0")}:00`)
+          startPhase(restSecs)
+        } else {
+          const studySecs = studyRef.current * 60
+          remainingRef.current = studySecs
+          setRemaining(studySecs)
+          setDisplay(`${String(studyRef.current).padStart(2, "0")}:00`)
+          startPhase(studySecs)
+        }
       } else {
         const [mins, secs] = e.data.split(":").map(Number)
         const total = mins * 60 + secs
@@ -78,13 +111,32 @@ export default function App() {
     }
   }
 
+  function handleStartTimer() {
+    if (running) return
+    startPhase(remainingRef.current)
+  }
+
   function pauseTimer() {
     sourceRef.current?.close()
     sourceRef.current = null
     setRunning(false)
   }
 
+  function handleBeginPomodoro() {
+    studyRef.current = studyMinutes
+    restRef.current = restMinutes
+    phaseRef.current = "study"
+    setPhase("study")
+    setCycleCount(0)
+    const total = studyMinutes * 60
+    remainingRef.current = total
+    setRemaining(total)
+    setDisplay(`${String(studyMinutes).padStart(2, "0")}:00`)
+    setPomConfigured(true)
+  }
+
   // ── Stopwatch ─────────────────────────────────────────────
+
   function formatStopwatch(totalSeconds: number) {
     const h = Math.floor(totalSeconds / 3600)
     const m = Math.floor((totalSeconds % 3600) / 60)
@@ -116,17 +168,16 @@ export default function App() {
   }
 
   // ── Shared reset ──────────────────────────────────────────
+
   function endSession() {
-    // Reset pomodoro
     pauseTimer()
-    const total = minutes * 60
-    remainingRef.current = total
-    setRemaining(total)
-    setDisplay(`${String(minutes).padStart(2, "0")}:00`)
-    setFinished(false)
-    // Reset stopwatch
     resetStopwatch()
-    // Reset nav
+    setDisplay(`${String(studyMinutes).padStart(2, "0")}:00`)
+    setRunning(false)
+    setPomConfigured(false)
+    setPhase("study")
+    phaseRef.current = "study"
+    setCycleCount(0)
     setMode(null)
     setIsVisible(false)
   }
@@ -159,7 +210,7 @@ export default function App() {
           />
         </div>
 
-        {/* LOCK IN button */}
+        {/* LOCK IN */}
         {!isVisible && (
           <div className="relative group mt-4">
             <div className="absolute -inset-0.5 bg-blue-500 rounded-lg blur opacity-20 group-hover:opacity-50 transition duration-1000"></div>
@@ -177,45 +228,113 @@ export default function App() {
           <div className="flex flex-col items-center gap-6 mt-4">
             <p className="font-[Orbitron] text-blue-400 tracking-widest text-sm">SELECT MODE</p>
             <div className="flex gap-6">
-              <button onClick={() => setMode("stopwatch")} className="mode-btn">
-                STOPWATCH
-              </button>
-              <button onClick={() => setMode("pomodoro")} className="mode-btn">
-                POMODORO
-              </button>
+              <button onClick={() => setMode("stopwatch")} className="mode-btn">STOPWATCH</button>
+              <button onClick={() => setMode("pomodoro")} className="mode-btn">POMODORO</button>
             </div>
           </div>
         )}
 
+        {/* Pomodoro config screen */}
+        {isVisible && mode === "pomodoro" && !pomConfigured && (
+          <div className="flex flex-col items-center gap-6 mt-4 w-full">
+            <p className="font-[Orbitron] text-blue-400 tracking-widest text-sm">CONFIGURE SESSION</p>
+
+            <div className="pom-config-grid">
+              <div className="pom-config-card">
+                <span className="pom-config-label">STUDY</span>
+                <div className="pom-config-controls">
+                  <button
+                    className="pom-adj-btn"
+                    onClick={() => setStudyMinutes((m) => Math.max(1, m - 1))}
+                  >−</button>
+                  <input
+                    type="number"
+                    className="pom-config-value-input"
+                    value={studyMinutes}
+                    min={1}
+                    max={120}
+                    onChange={(e) => {
+                      const val = Math.max(1, Math.min(120, parseInt(e.target.value) || 1))
+                      setStudyMinutes(val)
+                    }}
+                  />
+                  <button
+                    className="pom-adj-btn"
+                    onClick={() => setStudyMinutes((m) => Math.min(120, m + 1))}
+                  >+</button>
+                </div>
+                <span className="pom-config-unit">min</span>
+              </div>
+
+              <div className="pom-config-divider">／</div>
+
+              <div className="pom-config-card">
+                <span className="pom-config-label">REST</span>
+                <div className="pom-config-controls">
+                  <button
+                    className="pom-adj-btn"
+                    onClick={() => setRestMinutes((m) => Math.max(1, m - 1))}
+                  >−</button>
+                  <input
+                    type="number"
+                    className="pom-config-value-input"
+                    value={restMinutes}
+                    min={1}
+                    max={60}
+                    onChange={(e) => {
+                      const val = Math.max(1, Math.min(60, parseInt(e.target.value) || 1))
+                      setRestMinutes(val)
+                    }}
+                  />
+                  <button
+                    className="pom-adj-btn"
+                    onClick={() => setRestMinutes((m) => Math.min(60, m + 1))}
+                  >+</button>
+                </div>
+                <span className="pom-config-unit">min</span>
+              </div>
+            </div>
+
+            <div className="relative group mt-2">
+              <div className="absolute -inset-0.5 bg-blue-500 rounded-lg blur opacity-20 group-hover:opacity-50 transition duration-700"></div>
+              <button
+                onClick={handleBeginPomodoro}
+                className="relative !block !w-auto !h-auto !aspect-auto !px-14 !py-4 !border !border-blue-400/50 !rounded-xl !bg-slate-950 !text-xl !font-[Orbitron] !text-blue-400 !tracking-[0.4em] hover:!text-white hover:!border-blue-300 !font-bold !transition-all !duration-300 !shadow-[0_0_20px_rgba(59,130,246,0.3)]"
+              >
+                BEGIN
+              </button>
+            </div>
+
+            <button onClick={endSession} className="font-[Orbitron] text-xs text-slate-500 tracking-widest hover:text-slate-300 transition mt-1 !w-auto !h-auto !border-none !bg-transparent !rounded-none !shadow-none">
+              ← BACK
+            </button>
+          </div>
+        )}
+
         {/* Pomodoro timer */}
-        {isVisible && mode === "pomodoro" && (
-          <div className="flex flex-col items-center gap-6 w-full">
-            <div className="minutes-row">
-              <label>Minutes</label>
-              <input
-                type="number"
-                value={minutes}
-                min={1} max={120}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  const val = parseInt(e.target.value) || 0
-                  setMinutes(val)
-                  if (!running) {
-                    const total = val * 60
-                    remainingRef.current = total
-                    setRemaining(total)
-                    setDisplay(`${String(val).padStart(2, "0")}:00`)
-                  }
-                }}
-                disabled={running}
-              />
+        {isVisible && mode === "pomodoro" && pomConfigured && (
+          <div className="flex flex-col items-center gap-4 w-full">
+            <div className={`phase-badge ${phase === "study" ? "phase-study" : "phase-rest"}`}>
+              {phase === "study" ? "▸ STUDY" : "◉ REST"}
+            </div>
+
+            <div className="cycles-label">
+              CYCLE {cycleCount + 1}
             </div>
 
             <div className="timer">{display}</div>
 
-            {finished && <p className="message">Mission complete.</p>}
+            <div className="pom-phase-bar">
+              <div className={`pom-phase-segment ${phase === "study" ? "active-study" : ""}`}>
+                STUDY {studyMinutes}m
+              </div>
+              <div className={`pom-phase-segment ${phase === "rest" ? "active-rest" : ""}`}>
+                REST {restMinutes}m
+              </div>
+            </div>
 
             <div className="buttons">
-              <button onClick={startTimer} disabled={running} className="btn-start" title="Start">
+              <button onClick={handleStartTimer} disabled={running} className="btn-start" title="Start">
                 <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
                   <polygon points="5,3 19,12 5,21" />
                 </svg>
@@ -239,7 +358,6 @@ export default function App() {
         {isVisible && mode === "stopwatch" && (
           <div className="flex flex-col items-center gap-6 w-full">
             <div className="timer">{swDisplay}</div>
-
             <div className="buttons">
               <button onClick={startStopwatch} disabled={swRunning} className="btn-start" title="Start">
                 <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
