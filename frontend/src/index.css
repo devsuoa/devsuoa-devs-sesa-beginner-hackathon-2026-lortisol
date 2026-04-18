@@ -1,14 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&display=swap');
 @import "tailwindcss";
-
+ 
 html, body, #root {
   height: 100%;
   width: 100%;
   margin: 0;
   padding: 0;
-/*  overflow: hidden; /* This kills the scroll globally */
 }
-
+ 
 body {
   background: #030712;
   background-image: radial-gradient(ellipse at top, #0d1f3c 0%, #030712 60%);
@@ -16,28 +15,23 @@ body {
   display: flex;
   align-items: flex-end;
   justify-content: center;
-/*  padding-bottom: 4rem; */
 }
-
+ 
 .container {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 1rem;
 }
-
+ 
 .timer {
   font-family: 'Orbitron', monospace;
-  font-size: 3.5rem;
-  font-weight: 900;
+  font-size: 3rem;
+  font-weight: 400;
   color: #ffffff;
-  text-shadow:
-    0 0 20px rgba(74,158,255,0.8),
-    0 0 40px rgba(74,158,255,0.4),
-    0 0 80px rgba(74,158,255,0.2);
   letter-spacing: 0.05em;
 }
-
+ 
 .minutes-row {
   display: flex;
   align-items: center;
@@ -47,7 +41,7 @@ body {
   font-size: 1rem;
   letter-spacing: 0.1em;
 }
-
+ 
 input[type="number"] {
   background: rgba(74,158,255,0.05);
   border: 1px solid rgba(74,158,255,0.3);
@@ -60,12 +54,12 @@ input[type="number"] {
   outline: none;
   text-align: center;
 }
-
+ 
 .buttons {
   display: flex;
   gap: 16px;
 }
-
+ 
 button {
   width: 52px;
   height: 52px;
@@ -78,43 +72,38 @@ button {
   align-items: center;
   justify-content: center;
 }
-
+ 
 .btn-start { 
   border-color: #4a9eff; 
   color: #4a9eff;
   box-shadow: 0 0 10px rgba(74,158,255,0.5);
 }
-
+ 
 .btn-stop { 
   border-color: #ff0000; 
   color: #ff0000;
   box-shadow: 0 0 10px rgba(255,0,0,0.5);
 }
-
+ 
 .btn-end { 
   border-color: #888; 
   color: #888;
 }
-
+ 
 button:hover:not(:disabled) {
   background: rgba(255,255,255,0.05);
   box-shadow: 0 0 20px rgba(74,158,255,0.4);
 }
-
-/* @theme {
-  --font-display: "Orbitron", sans-serif;
-} */
-
-
+ 
 button:disabled { opacity: 0.3; cursor: not-allowed; }
-
+ 
 .message {
   font-family: 'Orbitron', monospace;
   font-size: 0.75rem;
   letter-spacing: 0.3em;
   color: #4a9eff;
 }
-
+ 
 .btn-icon {
   border: none;
   background: transparent;
@@ -125,13 +114,13 @@ button:disabled { opacity: 0.3; cursor: not-allowed; }
   box-shadow: none;
   color: #ffffff;
 }
-
+ 
 .btn-icon:hover:not(:disabled) {
   background: transparent;
   box-shadow: none;
   opacity: 0.7;
 }
-
+ 
 /* Mode picker */
 .mode-btn {
   font-family: 'Orbitron', monospace;
@@ -153,7 +142,7 @@ button:disabled { opacity: 0.3; cursor: not-allowed; }
   box-shadow: 0 0 20px rgba(74,158,255,0.3);
   color: #ffffff;
 }
-
+ 
 /* Pomodoro config */
 .pom-config-grid {
   display: flex;
@@ -219,7 +208,7 @@ button:disabled { opacity: 0.3; cursor: not-allowed; }
   font-size: 2rem;
   color: rgba(74,158,255,0.3);
 }
-
+ 
 /* Pomodoro runtime */
 .phase-badge {
   font-family: 'Orbitron', monospace;
@@ -270,14 +259,14 @@ button:disabled { opacity: 0.3; cursor: not-allowed; }
   border-color: rgba(52,211,153,0.5);
   background: rgba(52,211,153,0.08);
 }
-
+ 
 /* Stopwatch reset button */
 .btn-reset {
   border-color: #a855f7;
   color: #a855f7;
   box-shadow: 0 0 10px rgba(168,85,247,0.5);
 }
-
+ 
 /* Planet switch flash (triggered by "P" hotkey) */
 @keyframes planet-switch {
   0%   { box-shadow: 0 0 0 0 rgba(74,158,255,0.0); }
@@ -288,7 +277,7 @@ button:disabled { opacity: 0.3; cursor: not-allowed; }
   animation: planet-switch 0.6s ease-out forwards;
   border-radius: 50%;
 }
-
+ 
 /* ── Panels ─────────────────────────────────── */
 .panel-overlay {
   position: fixed;
@@ -350,7 +339,7 @@ button:disabled { opacity: 0.3; cursor: not-allowed; }
   color: rgba(255,255,255,0.25);
   margin-bottom: 18px;
 }
-
+ 
 /* ── Inventory ───────────────────────────────── */
 .inventory-grid {
   display: grid;
@@ -402,7 +391,7 @@ button:disabled { opacity: 0.3; cursor: not-allowed; }
   color: #4a9eff;
 }
 .inv-locked-label { color: rgba(255,255,255,0.18); }
-
+ 
 /* ── Profile ─────────────────────────────────── */
 .profile-grid {
   display: flex;
@@ -433,7 +422,7 @@ button:disabled { opacity: 0.3; cursor: not-allowed; }
   color: rgba(255,255,255,0.2);
   font-size: 0.62rem;
 }
-
+ 
 /* ── Settings dropdown ───────────────────────── */
 .settings-dropdown {
   position: fixed;
@@ -507,13 +496,13 @@ button:disabled { opacity: 0.3; cursor: not-allowed; }
   color: rgba(255,255,255,0.28);
   letter-spacing: 0.1em;
 }
-
+ 
 .pom-config-value-input::-webkit-outer-spin-button,
 .pom-config-value-input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
-
+ 
 .pom-config-value-input {
   -moz-appearance: textfield;
 }
