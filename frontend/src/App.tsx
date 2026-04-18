@@ -1,6 +1,6 @@
 import { useState, useRef } from "react"
 import "./index.css"
-import { BsPersonCircle } from "react-icons/bs"
+import { BsPerson } from "react-icons/bs";
 import { IoSettingsOutline } from "react-icons/io5"
 
 export default function App() {
@@ -65,14 +65,14 @@ export default function App() {
 
   <div className="flex gap-3">
 
-  <button className="btn-end" title="Solar System">
+  <button className="btn-icon" title="Solar System">
   </button>
 
-  <button className="btn-end" title="Profile">
-    <BsPersonCircle size={57}/>
+  <button className="btn-icon" title="Profile">
+    <BsPerson size={57}/>
   </button>
 
-  <button className="btn-end" title="Settings">
+  <button className="btn-icon" title="Settings">
     <IoSettingsOutline size={57}/>
   </button>
 
