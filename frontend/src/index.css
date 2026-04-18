@@ -1,6 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&display=swap');
 @import "tailwindcss";
 
+html, body, #root {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden; /* This kills the scroll globally */
+}
+
 body {
   background: #030712;
   background-image: radial-gradient(ellipse at top, #0d1f3c 0%, #030712 60%);
