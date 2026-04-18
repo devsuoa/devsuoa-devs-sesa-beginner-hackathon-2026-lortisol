@@ -6,6 +6,7 @@ import { IoPlanetOutline } from "react-icons/io5"
 
 export default function App() {
   const [settingsOpen, setSettingsOpen] = useState(false)
+  const [solarOpen, setSolarOpen] = useState(false)
   const [isVisible, setIsVisible] = useState(false)
   const [minutes, setMinutes] = useState(25)
   const [display, setDisplay] = useState("25:00")
@@ -103,7 +104,7 @@ export default function App() {
       <div className="fixed top-0 left-0 right-0 flex items-center justify-end px-6 py-4 z-10">
         <div className="flex gap-3">
 
-          <button className="btn-icon" title="Solar System">
+          <button className="btn-icon" title="Solar System" onClick={() => setSolarOpen(v => !v)}>
             <IoPlanetOutline size={40} />
           </button>
 
@@ -196,6 +197,35 @@ export default function App() {
           </div>
         )}
       </div>
+
+{solarOpen && (
+  <div
+    className="fixed inset-0 z-50 flex items-center justify-center"
+    style={{ backdropFilter: "blur(4px)", background: "rgba(0,0,0,0.4)" }}
+    onClick={() => setSolarOpen(false)}
+  >
+    <div
+      className="flex flex-col gap-6 p-8 rounded-2xl"
+      style={{
+        width: "320px",
+        background: "rgba(3,7,18,0.90)",
+        border: "1px solid rgba(74,158,255,0.2)",
+        backdropFilter: "blur(16px)",
+      }}
+      onClick={(e) => e.stopPropagation()}
+    >
+      <div className="flex justify-between items-center">
+        <span style={{ fontFamily: "Orbitron", fontSize: "1rem", letterSpacing: "0.3em", color: "#4a9eff" }}>
+          INVENTORY
+        </span>
+        <button className="btn-icon" onClick={() => setSolarOpen(false)}>
+          ✕
+        </button>
+      </div>
+      <p style={{ color: "#555", fontSize: "0.75rem", letterSpacing: "0.1em" }}>No items yet.</p>
+    </div>
+  </div>
+)}
 
 {settingsOpen && (
   <div
