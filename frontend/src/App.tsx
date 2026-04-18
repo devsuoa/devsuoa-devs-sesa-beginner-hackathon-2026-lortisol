@@ -6,6 +6,53 @@ import { IoPlanetOutline } from "react-icons/io5"
 
 type Mode = "stopwatch" | "pomodoro" | null
 type Phase = "study" | "rest"
+type PlanetState = "unlocked" | "silhouette" | "locked"
+
+interface PlanetDef {
+  id: number
+  name: string
+  img: string | null
+  state: PlanetState
+  orbitR: number
+  speed: number
+  size: number
+  startOffset: number
+  desc: string
+  type: string
+  mass: string
+  temp: string
+  color: string
+}
+
+const PLANET_DATA: PlanetDef[] = [
+  {
+    id: 0, name: "INTARIA", img: "/ast0.png", state: "unlocked",
+    orbitR: 76, speed: 18, size: 40, startOffset: 0.15,
+    desc: "A volcanic hellworld in perpetual eruption. Its iron-rich crust glows amber under constant magma tides. Survey probes detected rhythmic seismic pulses—almost like a heartbeat.",
+    type: "VOLCANIC", mass: "1.3 M⊕", temp: "847°C", color: "rgba(255,120,30,0.9)",
+  },
+  {
+    id: 1, name: "LUMINARA", img: "/frame0.png", state: "unlocked",
+    orbitR: 118, speed: 31, size: 44, startOffset: 0.62,
+    desc: "A chromatic ocean world swathed in bioluminescent algae. Its cloud cover scatters light into perpetual aurora. Probes found complex organic compounds in the upper atmosphere.",
+    type: "OCEAN", mass: "0.9 M⊕", temp: "22°C", color: "rgba(74,158,255,0.9)",
+  },
+  {
+    id: 2, name: "???", img: null, state: "silhouette",
+    orbitR: 162, speed: 46, size: 36, startOffset: 0.33,
+    desc: "", type: "", mass: "", temp: "", color: "rgba(255,255,255,0.2)",
+  },
+  {
+    id: 3, name: "???", img: null, state: "silhouette",
+    orbitR: 208, speed: 63, size: 38, startOffset: 0.77,
+    desc: "", type: "", mass: "", temp: "", color: "rgba(255,255,255,0.2)",
+  },
+  { id: 4, name: "LOCKED", img: null, state: "locked", orbitR: 252, speed: 82, size: 30, startOffset: 0.48, desc: "", type: "", mass: "", temp: "", color: "rgba(255,255,255,0.08)" },
+  { id: 5, name: "LOCKED", img: null, state: "locked", orbitR: 296, speed: 103, size: 28, startOffset: 0.11, desc: "", type: "", mass: "", temp: "", color: "rgba(255,255,255,0.06)" },
+  { id: 6, name: "LOCKED", img: null, state: "locked", orbitR: 340, speed: 126, size: 26, startOffset: 0.55, desc: "", type: "", mass: "", temp: "", color: "rgba(255,255,255,0.05)" },
+  { id: 7, name: "LOCKED", img: null, state: "locked", orbitR: 384, speed: 152, size: 24, startOffset: 0.22, desc: "", type: "", mass: "", temp: "", color: "rgba(255,255,255,0.04)" },
+  { id: 8, name: "LOCKED", img: null, state: "locked", orbitR: 428, speed: 181, size: 22, startOffset: 0.84, desc: "", type: "", mass: "", temp: "", color: "rgba(255,255,255,0.03)" },
+]
 
 export default function App() {
   const [isVisible, setIsVisible] = useState(false)
@@ -60,6 +107,9 @@ export default function App() {
   const [showInventory, setShowInventory] = useState(false)
   const [showProfile, setShowProfile] = useState(false)
   const [showSettings, setShowSettings] = useState(false)
+
+  // Solar system panel state
+  const [selectedPlanet, setSelectedPlanet] = useState<number | null>(null)
 
   // User stats
   const [totalSeconds, setTotalSeconds] = useState(0)
@@ -310,7 +360,7 @@ export default function App() {
             <div className="absolute -inset-0.5 bg-blue-500 rounded-lg blur opacity-20 group-hover:opacity-50 transition duration-1000"></div>
             <button
               onClick={() => setIsVisible(true)}
-              className="relative !block !w-auto !h-auto !aspect-auto !px-16 !py-5 !border !border-blue-400/50 !rounded-xl !bg-slate-950 !text-3xl !font-[Orbitron] !text-blue-400 !tracking-[0.4em] hover:!text-white hover:!border-blue-300 !font-bold !transition-all !duration-300 !shadow-[0_0_20px_rgba(59,130,246,0.3)]"
+              className="relative !block !w-auto !h-auto !aspect-auto !px-16 !py-5 !border !border-blue-400/40 !rounded-xl !bg-blue-400/10 !backdrop-blur-md !text-3xl !font-[Orbitron] !text-blue-400 !tracking-[0.4em] hover:!text-white hover:!border-blue-300 hover:!bg-blue-400/20 !font-bold !transition-all !duration-300 !shadow-[0_0_20px_rgba(59,130,246,0.3)]"
             >
               LOCK IN
             </button>
@@ -482,40 +532,455 @@ export default function App() {
 
       </div>
 
-      {/* ── Inventory Modal ── */}
+      {/* ── Solar System Inventory Modal ── */}
       {showInventory && (
-        <div className="panel-overlay" onClick={() => setShowInventory(false)}>
-          <div className="panel-modal" onClick={e => e.stopPropagation()}>
-            <div className="panel-header">
-              <span className="panel-title">INVENTORY</span>
-              <button className="panel-close" onClick={() => setShowInventory(false)}>✕</button>
-            </div>
-            <p className="panel-subtitle">PLANETS COLLECTED</p>
-            <div className="inventory-grid">
-              <div className="inv-slot unlocked">
-                <img src="/ast0.png" className="inv-planet-img" alt="Planet 1" />
-                <span className="inv-label">INTARIA</span>
-              </div>
-              <div className="inv-slot unlocked">
-                <img src="/frame0.png" className="inv-planet-img" alt="Asteroid" />
-                <span className="inv-label">LUMINARA</span>
-              </div>
-              <div className="inv-slot silhouette">
-                <div className="inv-silhouette-circle" />
-                <span className="inv-label inv-locked-label">???</span>
-              </div>
-              <div className="inv-slot silhouette">
-                <div className="inv-silhouette-circle" />
-                <span className="inv-label inv-locked-label">???</span>
-              </div>
-              {[5,6,7,8,9].map(n => (
-                <div key={n} className="inv-slot locked">
-                  <svg viewBox="0 0 24 24" fill="currentColor" width="36" height="36" className="inv-lock-icon">
-                    <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>
-                  </svg>
-                  <span className="inv-label inv-locked-label">LOCKED</span>
+        <div className="panel-overlay" onClick={() => { setShowInventory(false); setSelectedPlanet(null) }}>
+          <div
+            onClick={e => e.stopPropagation()}
+            style={{
+              background: '#07111f',
+              border: '1px solid rgba(74,158,255,0.2)',
+              borderRadius: 20,
+              padding: '28px 32px 24px',
+              width: 'min(92vw, 860px)',
+              maxHeight: '92vh',
+              overflowY: 'auto',
+              boxShadow: '0 0 80px rgba(74,158,255,0.06), 0 0 60px rgba(255,80,0,0.05), 0 30px 80px rgba(0,0,0,0.8)',
+              position: 'relative',
+            }}
+          >
+            {/* Keyframe styles */}
+            <style>{`
+              @keyframes orbit-spin {
+                from { transform: rotate(0deg); }
+                to   { transform: rotate(360deg); }
+              }
+              @keyframes planet-counter {
+                from { transform: translateX(-50%) translateY(-50%) rotate(0deg); }
+                to   { transform: translateX(-50%) translateY(-50%) rotate(-360deg); }
+              }
+              @keyframes red-giant-pulse {
+                0%, 100% {
+                  box-shadow: 0 0 28px #ff9900, 0 0 60px rgba(255,80,0,0.65), 0 0 120px rgba(200,40,0,0.3);
+                  transform: translate(-50%, -50%) scale(1);
+                }
+                50% {
+                  box-shadow: 0 0 42px #ffbb00, 0 0 85px rgba(255,110,0,0.75), 0 0 180px rgba(220,50,0,0.45);
+                  transform: translate(-50%, -50%) scale(1.07);
+                }
+              }
+              @keyframes corona-spin {
+                from { transform: translate(-50%, -50%) rotate(0deg); }
+                to   { transform: translate(-50%, -50%) rotate(360deg); }
+              }
+              @keyframes corona-spin-rev {
+                from { transform: translate(-50%, -50%) rotate(0deg); }
+                to   { transform: translate(-50%, -50%) rotate(-360deg); }
+              }
+              @keyframes info-slide-up {
+                from { opacity: 0; transform: translateY(10px); }
+                to   { opacity: 1; transform: translateY(0); }
+              }
+              @keyframes scan-line {
+                0%   { top: 0%; opacity: 0.5; }
+                100% { top: 100%; opacity: 0; }
+              }
+              .planet-unlocked-wrap:hover img {
+                filter: brightness(1.3) drop-shadow(0 0 10px rgba(74,158,255,0.9));
+              }
+              .planet-silhouette-wrap:hover .sil-circle {
+                filter: brightness(2.5) drop-shadow(0 0 8px rgba(255,255,255,0.4));
+              }
+              .planet-unlocked-wrap, .planet-silhouette-wrap {
+                transition: filter 0.2s;
+              }
+            `}</style>
+
+            {/* Header */}
+            <div className="panel-header" style={{ marginBottom: 6 }}>
+              <div>
+                <span className="panel-title" style={{ fontSize: '0.88rem' }}>STELLAR CARTOGRAPHY</span>
+                <div style={{
+                  fontFamily: "'Orbitron', monospace",
+                  fontSize: '0.53rem',
+                  letterSpacing: '0.3em',
+                  color: 'rgba(255,120,30,0.75)',
+                  marginTop: 4,
+                }}>
+                  RGC-4471 · RED GIANT PHASE · CLASS M5
                 </div>
+              </div>
+              <button className="panel-close" onClick={() => { setShowInventory(false); setSelectedPlanet(null) }}>✕</button>
+            </div>
+
+            {/* Solar System Canvas */}
+            <div style={{
+              position: 'relative',
+              width: '100%',
+              height: 530,
+              overflow: 'hidden',
+              borderRadius: 12,
+              background: 'radial-gradient(ellipse at 50% 50%, rgba(255,60,0,0.04) 0%, rgba(74,158,255,0.015) 40%, transparent 70%)',
+              marginTop: 12,
+            }}>
+
+              {/* Static orbit rings */}
+              {PLANET_DATA.map(p => (
+                <div key={`ring-${p.id}`} style={{
+                  position: 'absolute',
+                  left: '50%',
+                  top: '50%',
+                  width: p.orbitR * 2,
+                  height: p.orbitR * 2,
+                  marginLeft: -p.orbitR,
+                  marginTop: -p.orbitR,
+                  borderRadius: '50%',
+                  border: `1px solid rgba(255,255,255,${p.state === 'unlocked' ? '0.09' : p.state === 'silhouette' ? '0.05' : '0.03'})`,
+                  pointerEvents: 'none',
+                }} />
               ))}
+
+              {/* Red Giant Star */}
+              {/* Outer corona layer (slow spin) */}
+              <div style={{
+                position: 'absolute',
+                left: '50%',
+                top: '50%',
+                width: 110,
+                height: 110,
+                borderRadius: '50%',
+                background: 'radial-gradient(circle, rgba(255,100,0,0.12) 0%, rgba(255,50,0,0.06) 50%, transparent 70%)',
+                animation: 'corona-spin 12s linear infinite',
+                pointerEvents: 'none',
+                zIndex: 9,
+              }} />
+              {/* Inner corona */}
+              <div style={{
+                position: 'absolute',
+                left: '50%',
+                top: '50%',
+                width: 80,
+                height: 80,
+                borderRadius: '50%',
+                background: 'radial-gradient(circle, rgba(255,170,30,0.2) 0%, rgba(255,80,0,0.1) 55%, transparent 75%)',
+                animation: 'corona-spin-rev 7s linear infinite',
+                pointerEvents: 'none',
+                zIndex: 9,
+              }} />
+              {/* Star body */}
+              <div style={{
+                position: 'absolute',
+                left: '50%',
+                top: '50%',
+                width: 54,
+                height: 54,
+                borderRadius: '50%',
+                background: 'radial-gradient(circle at 36% 34%, #fff8e0, #ffcc44 20%, #ff8800 46%, #cc3300 72%, #881100)',
+                animation: 'red-giant-pulse 4.5s ease-in-out infinite',
+                zIndex: 10,
+              }} />
+
+              {/* Orbiting planets */}
+              {PLANET_DATA.map(p => {
+                const delay = `-${(p.startOffset * p.speed).toFixed(2)}s`
+                return (
+                  <div key={p.id} style={{
+                    position: 'absolute',
+                    left: '50%',
+                    top: '50%',
+                    width: p.orbitR * 2,
+                    height: p.orbitR * 2,
+                    marginLeft: -p.orbitR,
+                    marginTop: -p.orbitR,
+                    animationName: 'orbit-spin',
+                    animationDuration: `${p.speed}s`,
+                    animationTimingFunction: 'linear',
+                    animationIterationCount: 'infinite',
+                    animationDelay: delay,
+                    zIndex: p.state === 'unlocked' ? 7 : p.state === 'silhouette' ? 6 : 5,
+                    pointerEvents: 'none',
+                  }}>
+                    <div
+                      className={
+                        p.state === 'unlocked' ? 'planet-unlocked-wrap' :
+                        p.state === 'silhouette' ? 'planet-silhouette-wrap' : ''
+                      }
+                      style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: '50%',
+                        width: p.size,
+                        height: p.size,
+                        animationName: 'planet-counter',
+                        animationDuration: `${p.speed}s`,
+                        animationTimingFunction: 'linear',
+                        animationIterationCount: 'infinite',
+                        animationDelay: delay,
+                        cursor: p.state !== 'locked' ? 'pointer' : 'default',
+                        pointerEvents: 'auto',
+                      }}
+                      onClick={() => {
+                        if (p.state !== 'locked') {
+                          setSelectedPlanet(prev => prev === p.id ? null : p.id)
+                        }
+                      }}
+                    >
+                      {/* Unlocked: real planet image */}
+                      {p.state === 'unlocked' && (
+                        <img
+                          src={p.img!}
+                          alt={p.name}
+                          style={{
+                            width: '100%',
+                            height: '100%',
+                            borderRadius: '50%',
+                            objectFit: 'contain',
+                            display: 'block',
+                          }}
+                        />
+                      )}
+
+                      {/* Silhouette: dark sphere with subtle glow */}
+                      {p.state === 'silhouette' && (
+                        <div
+                          className="sil-circle"
+                          style={{
+                            width: '100%',
+                            height: '100%',
+                            borderRadius: '50%',
+                            background: 'radial-gradient(circle at 33% 33%, #1c1c30, #0c0c1a)',
+                            border: '1px solid rgba(255,255,255,0.09)',
+                            boxShadow: 'inset 0 0 14px rgba(0,0,0,0.9)',
+                          }}
+                        />
+                      )}
+
+                      {/* Locked: muted sphere with lock */}
+                      {p.state === 'locked' && (
+                        <div style={{
+                          width: '100%',
+                          height: '100%',
+                          borderRadius: '50%',
+                          background: 'rgba(255,255,255,0.02)',
+                          border: '1px solid rgba(255,255,255,0.05)',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                        }}>
+                          <svg viewBox="0 0 24 24" fill="rgba(255,255,255,0.12)"
+                            width={Math.round(p.size * 0.52)}
+                            height={Math.round(p.size * 0.52)}>
+                            <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>
+                          </svg>
+                        </div>
+                      )}
+
+                      {/* Selected ring highlight */}
+                      {selectedPlanet === p.id && (
+                        <div style={{
+                          position: 'absolute',
+                          inset: -5,
+                          borderRadius: '50%',
+                          border: `1.5px solid ${p.color}`,
+                          boxShadow: `0 0 12px ${p.color}, 0 0 24px ${p.color.replace('0.9', '0.3')}`,
+                          pointerEvents: 'none',
+                        }} />
+                      )}
+                    </div>
+                  </div>
+                )
+              })}
+
+              {/* Planet info panel — slides up from bottom of canvas */}
+              {selectedPlanet !== null && (() => {
+                const p = PLANET_DATA.find(pl => pl.id === selectedPlanet)!
+                return (
+                  <div style={{
+                    position: 'absolute',
+                    bottom: 12,
+                    left: 12,
+                    right: 12,
+                    background: 'rgba(4,10,22,0.94)',
+                    border: `1px solid ${p.color.replace('0.9', '0.35')}`,
+                    borderRadius: 14,
+                    padding: '16px 22px',
+                    backdropFilter: 'blur(14px)',
+                    zIndex: 30,
+                    animation: 'info-slide-up 0.25s ease-out forwards',
+                    overflow: 'hidden',
+                  }}>
+                    {/* Scan line effect */}
+                    <div style={{
+                      position: 'absolute',
+                      left: 0,
+                      right: 0,
+                      height: 2,
+                      background: `linear-gradient(90deg, transparent, ${p.color.replace('0.9', '0.4')}, transparent)`,
+                      animation: 'scan-line 2.5s linear infinite',
+                      pointerEvents: 'none',
+                    }} />
+
+                    <div style={{ display: 'flex', alignItems: 'flex-start', gap: 18 }}>
+                      {/* Planet image thumbnail */}
+                      {p.state === 'unlocked' && (
+                        <img src={p.img!} alt={p.name} style={{
+                          width: 52, height: 52, borderRadius: '50%',
+                          objectFit: 'contain', flexShrink: 0,
+                          boxShadow: `0 0 16px ${p.color.replace('0.9', '0.5')}`,
+                        }} />
+                      )}
+                      {p.state === 'silhouette' && (
+                        <div style={{
+                          width: 52, height: 52, borderRadius: '50%', flexShrink: 0,
+                          background: 'radial-gradient(circle at 33% 33%, #1c1c30, #0c0c1a)',
+                          border: '1px solid rgba(255,255,255,0.1)',
+                        }} />
+                      )}
+
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        {/* Planet name */}
+                        <div style={{
+                          fontFamily: "'Orbitron', monospace",
+                          fontSize: '0.88rem',
+                          letterSpacing: '0.3em',
+                          color: p.state === 'unlocked' ? p.color : 'rgba(255,200,80,0.8)',
+                          marginBottom: 10,
+                          textShadow: p.state === 'unlocked' ? `0 0 12px ${p.color.replace('0.9', '0.5')}` : 'none',
+                        }}>
+                          {p.name}
+                        </div>
+
+                        {p.state === 'unlocked' && (
+                          <>
+                            {/* Stats row */}
+                            <div style={{ display: 'flex', gap: 28, marginBottom: 10 }}>
+                              {[
+                                { label: 'TYPE', value: p.type },
+                                { label: 'MASS', value: p.mass },
+                                { label: 'SURFACE TEMP', value: p.temp },
+                              ].map(({ label, value }) => (
+                                <div key={label}>
+                                  <div style={{
+                                    fontFamily: "'Orbitron', monospace",
+                                    fontSize: '0.48rem', letterSpacing: '0.22em',
+                                    color: 'rgba(255,255,255,0.28)', marginBottom: 3,
+                                  }}>{label}</div>
+                                  <div style={{
+                                    fontFamily: "'Orbitron', monospace",
+                                    fontSize: '0.68rem', color: '#e0f0ff', letterSpacing: '0.08em',
+                                  }}>{value}</div>
+                                </div>
+                              ))}
+                            </div>
+                            {/* Description */}
+                            <div style={{
+                              fontFamily: "'Orbitron', monospace",
+                              fontSize: '0.57rem',
+                              color: 'rgba(255,255,255,0.5)',
+                              letterSpacing: '0.04em',
+                              lineHeight: 1.75,
+                            }}>
+                              {p.desc}
+                            </div>
+                          </>
+                        )}
+
+                        {p.state === 'silhouette' && (
+                          <div style={{
+                            fontFamily: "'Orbitron', monospace",
+                            fontSize: '0.57rem',
+                            letterSpacing: '0.12em',
+                            lineHeight: 1.8,
+                            color: 'rgba(255,190,60,0.7)',
+                          }}>
+                            ◈ ANOMALOUS SIGNAL DETECTED<br />
+                            <span style={{ color: 'rgba(255,255,255,0.32)', fontSize: '0.52rem' }}>
+                              Spectral classification pending. Orbital resonance suggests significant mass.<br />
+                              Continue studying to pierce the veil.
+                            </span>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Dismiss */}
+                      <button
+                        onClick={() => setSelectedPlanet(null)}
+                        style={{
+                          background: 'transparent', border: 'none',
+                          color: 'rgba(255,255,255,0.25)', cursor: 'pointer',
+                          fontSize: '0.75rem', padding: 0, lineHeight: 1, flexShrink: 0,
+                          fontFamily: 'monospace',
+                        }}
+                      >✕</button>
+                    </div>
+                  </div>
+                )
+              })()}
+
+              {/* Idle hint */}
+              {selectedPlanet === null && (
+                <div style={{
+                  position: 'absolute',
+                  bottom: 16, left: '50%',
+                  transform: 'translateX(-50%)',
+                  fontFamily: "'Orbitron', monospace",
+                  fontSize: '0.52rem',
+                  letterSpacing: '0.35em',
+                  color: 'rgba(255,255,255,0.14)',
+                  whiteSpace: 'nowrap',
+                  pointerEvents: 'none',
+                }}>
+                  SELECT A BODY TO SCAN
+                </div>
+              )}
+            </div>
+
+            {/* Footer */}
+            <div style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              marginTop: 16,
+              paddingTop: 14,
+              borderTop: '1px solid rgba(255,255,255,0.05)',
+            }}>
+              <div style={{
+                fontFamily: "'Orbitron', monospace",
+                fontSize: '0.53rem',
+                letterSpacing: '0.25em',
+                color: 'rgba(255,255,255,0.18)',
+              }}>
+                PLANETS CATALOGUED
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                {/* Mini legend */}
+                <div style={{ display: 'flex', gap: 14, alignItems: 'center' }}>
+                  {[
+                    { label: 'UNLOCKED', color: '#4a9eff' },
+                    { label: 'UNKNOWN', color: 'rgba(255,255,255,0.3)' },
+                    { label: 'LOCKED', color: 'rgba(255,255,255,0.12)' },
+                  ].map(({ label, color }) => (
+                    <div key={label} style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+                      <div style={{ width: 6, height: 6, borderRadius: '50%', background: color }} />
+                      <span style={{
+                        fontFamily: "'Orbitron', monospace",
+                        fontSize: '0.45rem',
+                        letterSpacing: '0.15em',
+                        color,
+                      }}>{label}</span>
+                    </div>
+                  ))}
+                </div>
+                <div style={{
+                  fontFamily: "'Orbitron', monospace",
+                  fontSize: '0.68rem',
+                  color: '#4a9eff',
+                  letterSpacing: '0.15em',
+                  marginLeft: 8,
+                }}>
+                  2 / 9
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -532,7 +997,7 @@ export default function App() {
             <div className="profile-grid">
               <div className="profile-row">
                 <span className="profile-key">NAME</span>
-                <span className="profile-val">Lortisol</span>
+                <span className="profile-val">Jacky</span>
               </div>
               <div className="profile-row">
                 <span className="profile-key">TIME STUDIED</span>
