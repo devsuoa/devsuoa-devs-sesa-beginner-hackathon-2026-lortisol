@@ -6,7 +6,7 @@ html, body, #root {
   width: 100%;
   margin: 0;
   padding: 0;
-  overflow: hidden; /* This kills the scroll globally */
+/*  overflow: hidden; /* This kills the scroll globally */
 }
 
 body {
@@ -16,7 +16,7 @@ body {
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  padding-bottom: 4rem;
+/*  padding-bottom: 4rem; */
 }
 
 .container {
@@ -130,4 +130,380 @@ button:disabled { opacity: 0.3; cursor: not-allowed; }
   background: transparent;
   box-shadow: none;
   opacity: 0.7;
+}
+
+/* Mode picker */
+.mode-btn {
+  font-family: 'Orbitron', monospace;
+  font-size: 0.85rem;
+  letter-spacing: 0.3em;
+  color: #4a9eff;
+  border: 1px solid rgba(74,158,255,0.4);
+  background: rgba(74,158,255,0.05);
+  padding: 16px 32px;
+  width: auto;
+  height: auto;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.mode-btn:hover {
+  background: rgba(74,158,255,0.15);
+  border-color: #4a9eff;
+  box-shadow: 0 0 20px rgba(74,158,255,0.3);
+  color: #ffffff;
+}
+
+/* Pomodoro config */
+.pom-config-grid {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.pom-config-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  background: rgba(74,158,255,0.04);
+  border: 1px solid rgba(74,158,255,0.2);
+  border-radius: 12px;
+  padding: 20px 28px;
+}
+.pom-config-label {
+  font-family: 'Orbitron', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.3em;
+  color: #4a9eff;
+}
+.pom-config-controls {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.pom-config-value {
+  font-family: 'Orbitron', monospace;
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: #ffffff;
+  min-width: 60px;
+  text-align: center;
+}
+.pom-config-unit {
+  font-family: 'Orbitron', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  color: rgba(74,158,255,0.5);
+}
+.pom-adj-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid rgba(74,158,255,0.4);
+  background: transparent;
+  color: #4a9eff;
+  font-size: 1.3rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.pom-adj-btn:hover {
+  background: rgba(74,158,255,0.15);
+  box-shadow: 0 0 12px rgba(74,158,255,0.3);
+  color: #ffffff;
+}
+.pom-config-divider {
+  font-family: 'Orbitron', monospace;
+  font-size: 2rem;
+  color: rgba(74,158,255,0.3);
+}
+
+/* Pomodoro runtime */
+.phase-badge {
+  font-family: 'Orbitron', monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.4em;
+  padding: 6px 20px;
+  border-radius: 99px;
+  transition: all 0.5s;
+}
+.phase-study {
+  color: #4a9eff;
+  border: 1px solid rgba(74,158,255,0.5);
+  box-shadow: 0 0 16px rgba(74,158,255,0.2);
+}
+.phase-rest {
+  color: #34d399;
+  border: 1px solid rgba(52,211,153,0.5);
+  box-shadow: 0 0 16px rgba(52,211,153,0.2);
+}
+.cycles-label {
+  font-family: 'Orbitron', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.3em;
+  color: rgba(255,255,255,0.3);
+}
+.pom-phase-bar {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+.pom-phase-segment {
+  font-family: 'Orbitron', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  padding: 4px 14px;
+  border-radius: 99px;
+  border: 1px solid rgba(255,255,255,0.1);
+  color: rgba(255,255,255,0.2);
+  transition: all 0.5s;
+}
+.active-study {
+  color: #4a9eff;
+  border-color: rgba(74,158,255,0.5);
+  background: rgba(74,158,255,0.08);
+}
+.active-rest {
+  color: #34d399;
+  border-color: rgba(52,211,153,0.5);
+  background: rgba(52,211,153,0.08);
+}
+
+/* Stopwatch reset button */
+.btn-reset {
+  border-color: #a855f7;
+  color: #a855f7;
+  box-shadow: 0 0 10px rgba(168,85,247,0.5);
+}
+
+/* Planet switch flash (triggered by "P" hotkey) */
+@keyframes planet-switch {
+  0%   { box-shadow: 0 0 0 0 rgba(74,158,255,0.0); }
+  30%  { box-shadow: 0 0 0 18px rgba(74,158,255,0.35); }
+  100% { box-shadow: 0 0 0 40px rgba(74,158,255,0.0); }
+}
+.planet-switch-flash {
+  animation: planet-switch 0.6s ease-out forwards;
+  border-radius: 50%;
+}
+
+/* ── Panels ─────────────────────────────────── */
+.panel-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+}
+.panel-modal {
+  background: #07111f;
+  border: 1px solid rgba(74,158,255,0.22);
+  border-radius: 16px;
+  padding: 28px 32px;
+  min-width: 340px;
+  max-width: 90vw;
+  box-shadow: 0 0 60px rgba(74,158,255,0.08);
+}
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+.panel-title {
+  font-family: 'Orbitron', monospace;
+  font-size: 0.78rem;
+  letter-spacing: 0.4em;
+  color: #4a9eff;
+}
+.panel-close {
+  width: 28px !important;
+  height: 28px !important;
+  min-width: 28px !important;
+  border-radius: 50% !important;
+  border: 1px solid rgba(255,255,255,0.15) !important;
+  color: rgba(255,255,255,0.35) !important;
+  font-size: 0.72rem !important;
+  background: transparent !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+.panel-close:hover {
+  color: #fff !important;
+  border-color: rgba(255,255,255,0.4) !important;
+  background: rgba(255,255,255,0.05) !important;
+  box-shadow: none !important;
+}
+.panel-subtitle {
+  font-family: 'Orbitron', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.3em;
+  color: rgba(255,255,255,0.25);
+  margin-bottom: 18px;
+}
+
+/* ── Inventory ───────────────────────────────── */
+.inventory-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+.inv-slot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  border-radius: 10px;
+  padding: 14px 10px;
+  border: 1px solid;
+}
+.inv-slot.unlocked {
+  border-color: rgba(74,158,255,0.3);
+  background: rgba(74,158,255,0.05);
+}
+.inv-slot.silhouette {
+  border-color: rgba(255,255,255,0.07);
+  background: rgba(255,255,255,0.02);
+}
+.inv-slot.locked {
+  border-color: rgba(255,255,255,0.04);
+  background: rgba(0,0,0,0.2);
+}
+.inv-planet-img {
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+  border-radius: 50%;
+}
+.inv-silhouette-circle {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #181828, #0b0b14);
+  border: 1px solid rgba(255,255,255,0.04);
+}
+.inv-lock-icon {
+  color: rgba(255,255,255,0.1);
+  margin: 14px 0;
+}
+.inv-label {
+  font-family: 'Orbitron', monospace;
+  font-size: 0.53rem;
+  letter-spacing: 0.2em;
+  color: #4a9eff;
+}
+.inv-locked-label { color: rgba(255,255,255,0.18); }
+
+/* ── Profile ─────────────────────────────────── */
+.profile-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.profile-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.profile-row:last-child { border-bottom: none; }
+.profile-key {
+  font-family: 'Orbitron', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.25em;
+  color: rgba(255,255,255,0.3);
+}
+.profile-val {
+  font-family: 'Orbitron', monospace;
+  font-size: 0.78rem;
+  color: #fff;
+  letter-spacing: 0.1em;
+}
+.profile-empty {
+  color: rgba(255,255,255,0.2);
+  font-size: 0.62rem;
+}
+
+/* ── Settings dropdown ───────────────────────── */
+.settings-dropdown {
+  position: fixed;
+  top: 72px;
+  right: 24px;
+  width: 290px;
+  background: #07111f;
+  border: 1px solid rgba(74,158,255,0.22);
+  border-radius: 14px;
+  padding: 20px 24px;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.7), 0 0 30px rgba(74,158,255,0.06);
+  z-index: 50;
+}
+.settings-section {
+  font-family: 'Orbitron', monospace;
+  font-size: 0.53rem;
+  letter-spacing: 0.3em;
+  color: rgba(74,158,255,0.45);
+  margin: 16px 0 8px;
+}
+.settings-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5px 0;
+}
+.settings-label {
+  font-family: 'Orbitron', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+  color: rgba(255,255,255,0.55);
+}
+.toggle-btn {
+  font-family: 'Orbitron', monospace !important;
+  font-size: 0.58rem !important;
+  letter-spacing: 0.2em !important;
+  padding: 4px 14px !important;
+  border-radius: 99px !important;
+  border: 1px solid !important;
+  cursor: pointer !important;
+  width: auto !important;
+  height: auto !important;
+  background: transparent !important;
+  transition: all 0.2s !important;
+  box-shadow: none !important;
+}
+.toggle-on {
+  color: #4a9eff !important;
+  border-color: rgba(74,158,255,0.5) !important;
+  background: rgba(74,158,255,0.1) !important;
+}
+.toggle-off {
+  color: rgba(255,255,255,0.28) !important;
+  border-color: rgba(255,255,255,0.12) !important;
+}
+.settings-num-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.settings-num {
+  font-family: 'Orbitron', monospace;
+  font-size: 0.8rem;
+  color: #fff;
+  min-width: 22px;
+  text-align: center;
+}
+.settings-unit {
+  font-family: 'Orbitron', monospace;
+  font-size: 0.53rem;
+  color: rgba(255,255,255,0.28);
+  letter-spacing: 0.1em;
 }
