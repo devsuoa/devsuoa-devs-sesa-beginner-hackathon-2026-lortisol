@@ -1,5 +1,8 @@
 import { useState, useRef, useEffect, useMemo } from "react"
 import "./index.css"
+import { BsPerson } from "react-icons/bs";
+import { IoSettingsOutline } from "react-icons/io5"
+import { IoPlanetOutline } from "react-icons/io5";
 
 export default function App() {
   const [minutes, setMinutes] = useState(25)
@@ -99,32 +102,25 @@ export default function App() {
   return (  
     <>  
 {/* Top navbar */}
-<div className="fixed top-0 left-0 right-0 flex items-center justify-between px-6 py-4">
+<div className="fixed top-0 left-0 right-0 flex items-center justify-end px-6 py-4">
  
-  <span className="font-[Orbitron] text-xl text-white tracking-widest">
-    Project Template
+  <span className="absolute left-1/2 -translate-x-1/2 translate-y-7 font-[Orbitron] text-5xl text-white font-bold tracking-widest">
+    Spaced In
   </span>
 
   <div className="flex gap-3">
 
-    <button className="btn-end" title="Solar System">
-      {/* swap in whatever icon/label you want */}
-      <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
-        <circle cx="12" cy="12" r="10" />
-      </svg>
-    </button>
+  <button className="btn-icon" title="Solar System">
+    <IoPlanetOutline size={47}/>
+  </button>
 
-    <button className="btn-end" title="Profile">
-      <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
-        <circle cx="12" cy="12" r="10" />
-      </svg>
-    </button>
+  <button className="btn-icon" title="Profile">
+    <BsPerson size={47}/>
+  </button>
 
-    <button className="btn-end" title="Settings">
-      <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
-        <circle cx="12" cy="12" r="10" />
-      </svg>
-    </button>
+  <button className="btn-icon" title="Settings">
+    <IoSettingsOutline size={47}/>
+  </button>
 
   </div>
 </div>
