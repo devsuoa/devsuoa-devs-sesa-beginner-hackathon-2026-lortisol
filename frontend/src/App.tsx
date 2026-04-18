@@ -45,8 +45,6 @@ export default function App() {
 
   return (
     <div className="container">
-      <h1>Study Timer</h1>
-
       <div className="timer">{display}</div>
 
       <div className="minutes-row">
@@ -68,14 +66,21 @@ export default function App() {
       {finished && <p className="message">Mission complete.</p>}
 
       <div className="buttons">
-        <button onClick={startTimer} disabled={running} className="btn-start">
-          Start
+        <button onClick={startTimer} disabled={running} className="btn-start" title="Start">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+            <polygon points="5,3 19,12 5,21" />
+          </svg>
         </button>
-        <button onClick={stopTimer} disabled={!running} className="btn-stop">
-          Stop
+        <button onClick={stopTimer} disabled={!running} className="btn-stop" title="Pause">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+            <rect x="5" y="3" width="4" height="18" />
+            <rect x="15" y="3" width="4" height="18" />
+          </svg>
         </button>
-        <button onClick={endSession} className="btn-end">
-          End Session
+        <button onClick={endSession} className="btn-end" title="End Session">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+            <rect x="4" y="4" width="16" height="16" />
+          </svg>
         </button>
       </div>
     </div>
