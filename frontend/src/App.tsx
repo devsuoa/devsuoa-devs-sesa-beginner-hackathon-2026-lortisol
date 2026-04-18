@@ -1,5 +1,7 @@
 import { useState, useRef } from "react"
 import "./index.css"
+import { BsPersonCircle } from "react-icons/bs"
+import { IoSettingsOutline } from "react-icons/io5"
 
 export default function App() {
   const [minutes, setMinutes] = useState(25)
@@ -63,24 +65,16 @@ export default function App() {
 
   <div className="flex gap-3">
 
-    <button className="btn-end" title="Solar System">
-      {/* swap in whatever icon/label you want */}
-      <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
-        <circle cx="12" cy="12" r="10" />
-      </svg>
-    </button>
+  <button className="btn-end" title="Solar System">
+  </button>
 
-    <button className="btn-end" title="Profile">
-      <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
-        <circle cx="12" cy="12" r="10" />
-      </svg>
-    </button>
+  <button className="btn-end" title="Profile">
+    <BsPersonCircle size={57}/>
+  </button>
 
-    <button className="btn-end" title="Settings">
-      <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
-        <circle cx="12" cy="12" r="10" />
-      </svg>
-    </button>
+  <button className="btn-end" title="Settings">
+    <IoSettingsOutline size={57}/>
+  </button>
 
   </div>
 </div>
