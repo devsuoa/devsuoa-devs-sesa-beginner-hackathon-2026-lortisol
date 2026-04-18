@@ -2,6 +2,7 @@ import { useState, useRef } from "react"
 import "./index.css"
 import { BsPerson } from "react-icons/bs";
 import { IoSettingsOutline } from "react-icons/io5"
+import { IoPlanetOutline } from "react-icons/io5";
 
 export default function App() {
   const [minutes, setMinutes] = useState(25)
@@ -57,15 +58,16 @@ export default function App() {
   return (  
     <>  
 {/* Top navbar */}
-<div className="fixed top-0 left-0 right-0 flex items-center justify-between px-6 py-4">
+<div className="fixed top-0 left-0 right-0 flex items-center justify-end px-6 py-4">
  
-  <span className="font-[Orbitron] text-3xl text-white font-bold tracking-widest">
+  <span className="absolute left-1/2 -translate-x-1/2 font-[Orbitron] text-3xl text-white font-bold tracking-widest">
     Spaced In
   </span>
 
   <div className="flex gap-3">
 
   <button className="btn-icon" title="Solar System">
+    <IoPlanetOutline size={57}/>
   </button>
 
   <button className="btn-icon" title="Profile">
