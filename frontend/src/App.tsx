@@ -1,4 +1,4 @@
-import { useState, useRef } from "react"
+import { useState, useRef, useEffect, useMemo } from "react"
 import "./index.css"
 
 export default function App() {
@@ -9,6 +9,50 @@ export default function App() {
   const [finished, setFinished] = useState(false)
   const sourceRef = useRef<EventSource | null>(null)
   const remainingRef = useRef(25 * 60)
+
+  const planetImages = useMemo(() => [
+    "/frame0.png",
+    "/frame1.png",
+    "/frame2.png",
+    "/frame3.png",
+    "/frame4.png",
+    "/frame5.png",
+    "/frame6.png",
+    "/frame7.png",
+    "/frame8.png",
+  ], [])
+
+  const [planetIndex, setPlanetIndex] = useState(0)
+  const [spinSpeed, setSpinSpeed] = useState(500) // 0.5s default
+  const clickTimeoutRef = useRef<number | null>(null)
+
+  useEffect(() => {
+    const interval = window.setInterval(() => {
+      setPlanetIndex((prev) => (prev + 1) % planetImages.length)
+    }, spinSpeed)
+
+    return () => window.clearInterval(interval)
+  }, [spinSpeed, planetImages.length])
+
+  function handlePlanetClick() {
+    setSpinSpeed(100) // speed up
+
+    if (clickTimeoutRef.current) {
+      window.clearTimeout(clickTimeoutRef.current)
+    }
+
+    clickTimeoutRef.current = window.setTimeout(() => {
+      setSpinSpeed(500) // back to normal
+    }, 1200)
+  }
+
+  useEffect(() => {
+    return () => {
+      if (clickTimeoutRef.current) {
+        window.clearTimeout(clickTimeoutRef.current)
+      }
+    }
+  }, [])
 
   function startTimer() {
     if (running) return
@@ -86,7 +130,16 @@ export default function App() {
 </div>
 
 <div className="container">
-
+      <div className="planet-wrapper" onClick={handlePlanetClick}>
+        <img
+          src={planetImages[planetIndex]}
+          width="400"
+          height="400"
+          alt="Spinning planet"
+          className="planet-image"
+          draggable={false}
+        />
+      </div>
       <div className="timer">{display}</div>
 
       <div className="minutes-row">
