@@ -1,7 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600&display=swap');
-
-* { margin: 0; padding: 0; box-sizing: border-box; }
-
 body {
   background: #030712;
   background-image: radial-gradient(ellipse at top, #0d1f3c 0%, #030712 60%);
@@ -93,6 +89,7 @@ button:hover:not(:disabled) {
   background: rgba(255,255,255,0.05);
   box-shadow: 0 0 20px rgba(74,158,255,0.4);
 }
+
 
 button:disabled { opacity: 0.3; cursor: not-allowed; }
 

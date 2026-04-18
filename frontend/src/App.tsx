@@ -53,7 +53,7 @@ export default function App() {
   }
 
   return (
-    <div className="container">
+<div className="container">
       <div className="timer">{display}</div>
 
       <div className="minutes-row">
@@ -97,6 +97,13 @@ export default function App() {
           </svg>
         </button>
       </div>
+    <div className="p-2 font-[Orbitron] text-3xl bg-amber-400">
+      <h1>Project Template</h1>
+      
+        <p style={{color:'black'}}>
+        Backend Status: <strong>{status}</strong>
+        </p>
     </div>
+  </div>
   )
 }
