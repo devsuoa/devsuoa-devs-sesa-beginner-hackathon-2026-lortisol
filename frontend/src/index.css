@@ -507,3 +507,13 @@ button:disabled { opacity: 0.3; cursor: not-allowed; }
   color: rgba(255,255,255,0.28);
   letter-spacing: 0.1em;
 }
+
+.pom-config-value-input::-webkit-outer-spin-button,
+.pom-config-value-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.pom-config-value-input {
+  -moz-appearance: textfield;
+}
