@@ -2,9 +2,10 @@ import { useState, useRef } from "react"
 import "./index.css"
 
 export default function App() {
+  const [isVisible, setIsVisible] = useState(false)
   const [minutes, setMinutes] = useState(25)
   const [display, setDisplay] = useState("25:00")
-  const [remaining, setRemaining] = useState(25 * 60)
+  const [, setRemaining] = useState(25 * 60)
   const [running, setRunning] = useState(false)
   const [finished, setFinished] = useState(false)
   const sourceRef = useRef<EventSource | null>(null)
@@ -50,91 +51,119 @@ export default function App() {
     setRemaining(total)
     setDisplay(`${String(minutes).padStart(2, "0")}:00`)
     setFinished(false)
+    // Optional: Hide the timer again when session is ended
+    setIsVisible(false)
   }
 
   return (  
     <>  
-{/* Top navbar */}
-<div className="fixed top-0 left-0 right-0 flex items-center justify-between px-6 py-4">
- 
-  <span className="font-[Orbitron] text-xl text-white tracking-widest">
-    Project Template
-  </span>
+      {/* Top navbar */}
+      <div className="fixed top-0 left-0 right-0 flex items-center justify-between px-6 py-4">
+        <span className="font-[Orbitron] text-xl text-white tracking-widest">
+          Project Template
+        </span>
 
-  <div className="flex gap-3">
-
-    <button className="btn-end" title="Solar System">
-      {/* swap in whatever icon/label you want */}
-      <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
-        <circle cx="12" cy="12" r="10" />
-      </svg>
-    </button>
-
-    <button className="btn-end" title="Profile">
-      <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
-        <circle cx="12" cy="12" r="10" />
-      </svg>
-    </button>
-
-    <button className="btn-end" title="Settings">
-      <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
-        <circle cx="12" cy="12" r="10" />
-      </svg>
-    </button>
-
-  </div>
-</div>
-
-<div className="container">
-
-      <div className="timer">{display}</div>
-
-      <div className="minutes-row">
-        <label>Minutes</label>
-        <input
-          type="number"
-          value={minutes}
-          min={1}
-          max={120}
-          onChange={(e) => {
-            const val = parseInt(e.target.value)
-            setMinutes(val)
-            if (!running) {
-              const total = val * 60
-              remainingRef.current = total
-              setRemaining(total)
-              setDisplay(`${String(val).padStart(2, "0")}:00`)
-            }
-          }}
-          disabled={running}
-        />
+        <div className="flex gap-3">
+          <button className="btn-end" title="Solar System">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
+              <circle cx="12" cy="12" r="10" />
+            </svg>
+          </button>
+          <button className="btn-end" title="Profile">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
+              <circle cx="12" cy="12" r="10" />
+            </svg>
+          </button>
+          <button className="btn-end" title="Settings">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
+              <circle cx="12" cy="12" r="10" />
+            </svg>
+          </button>
+        </div>
       </div>
 
-      {finished && <p className="message">Mission complete.</p>}
+      <div className="flex flex-col items-center justify-end h-screen pb-20 overflow-hidden">
+        
+        {/* NEW RECTANGULAR START BUTTON */}
+        {!isVisible && (
+          <div className="relative group">
+            {/* Background Glow Effect */}
+            <div className="absolute -inset-0.5 bg-blue-500 rounded-lg blur opacity-20 group-hover:opacity-50 transition duration-1000"></div>
+            
+            <button 
+              onClick={() => setIsVisible(true)}
+              className="
+                relative
+                !block !w-auto !h-auto !aspect-auto
+                !px-16 !py-5
+                !border !border-blue-400/50 
+                !rounded-xl 
+                !bg-slate-950
+                !text-3xl !font-[Orbitron] !text-blue-400 !tracking-[0.4em]
+                hover:!text-white hover:!border-blue-300 !font-bold
+                !transition-all !duration-300
+                !shadow-[0_0_20px_rgba(59,130,246,0.3)]
+              "
+            >
+              LOCK IN
+            </button>
+          </div>
+        )}
 
-      <div className="buttons">
-        
-        <button onClick={startTimer} disabled={running} className="btn-start" title="Start">
-          <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
-            <polygon points="5,3 19,12 5,21" />
-          </svg>
-        </button>
-        
-        <button onClick={pauseTimer} disabled={!running} className="btn-stop" title="Pause">
-          <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
-            <rect x="5" y="3" width="4" height="18" />
-            <rect x="15" y="3" width="4" height="18" />
-          </svg>
-        </button>
-        
-        <button onClick={endSession} className="btn-end" title="End Session">
-          <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
-            <rect x="4" y="4" width="16" height="16" />
-          </svg>
-        </button>
+        {/* TIMER INTERFACE */}
+        {isVisible && (
+          <>
+          <div className="minutes-row">
+              <label>Minutes</label>
+              <input
+                type="number"
+                value={minutes}
+                min={1}
+                max={120}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  const val = parseInt(e.target.value) || 0
+                  setMinutes(val)
+                  if (!running) {
+                    const total = val * 60
+                    remainingRef.current = total
+                    setRemaining(total)
+                    setDisplay(`${String(val).padStart(2, "0")}:00`)
+                  }
+                }}
+                disabled={running}
+              />
+            </div>
+          
+          <div className="container">
+            <div className="timer">{display}</div>
 
+
+            {finished && <p className="message">Mission complete.</p>}
+
+            <div className="buttons">
+              <button onClick={startTimer} disabled={running} className="btn-start" title="Run Timer">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+                  <polygon points="5,3 19,12 5,21" />
+                </svg>
+              </button>
+              
+              <button onClick={pauseTimer} disabled={!running} className="btn-stop" title="Pause">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+                  <rect x="5" y="3" width="4" height="18" />
+                  <rect x="15" y="3" width="4" height="18" />
+                </svg>
+              </button>
+              
+              <button onClick={endSession} className="btn-end" title="Exit">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+                  <rect x="4" y="4" width="16" height="16" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </>
+        )}
       </div>
-  </div>
-  </>
+    </>
   )
 }
