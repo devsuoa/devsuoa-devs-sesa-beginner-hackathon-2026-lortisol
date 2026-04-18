@@ -60,22 +60,22 @@ export default function App() {
 {/* Top navbar */}
 <div className="fixed top-0 left-0 right-0 flex items-center justify-end px-6 py-4">
  
-  <span className="absolute left-1/2 -translate-x-1/2 font-[Orbitron] text-3xl text-white font-bold tracking-widest">
+  <span className="absolute left-1/2 -translate-x-1/2 translate-y-7 font-[Orbitron] text-5xl text-white font-bold tracking-widest">
     Spaced In
   </span>
 
   <div className="flex gap-3">
 
   <button className="btn-icon" title="Solar System">
-    <IoPlanetOutline size={57}/>
+    <IoPlanetOutline size={47}/>
   </button>
 
   <button className="btn-icon" title="Profile">
-    <BsPerson size={57}/>
+    <BsPerson size={47}/>
   </button>
 
   <button className="btn-icon" title="Settings">
-    <IoSettingsOutline size={57}/>
+    <IoSettingsOutline size={47}/>
   </button>
 
   </div>
