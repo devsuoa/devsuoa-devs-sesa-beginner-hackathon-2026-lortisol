@@ -22,3 +22,19 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Python (Backend)
+backend/venv/
+backend/__pycache__/
+backend/.env
+backend/*.pyc
+
+# React (Frontend)
+frontend/node_modules/
+frontend/dist/
+frontend/.env.local
+frontend/.env
+
+# OS specific
+.DS_Store
+Thumbs.db
