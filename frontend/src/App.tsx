@@ -997,7 +997,7 @@ export default function App() {
             <div className="profile-grid">
               <div className="profile-row">
                 <span className="profile-key">NAME</span>
-                <span className="profile-val">Jacky</span>
+                <span className="profile-val">Lortisol</span>
               </div>
               <div className="profile-row">
                 <span className="profile-key">TIME STUDIED</span>
