@@ -487,13 +487,13 @@ export default function App() {
           </div>
 
           {/* Progress bar toward next planet unlock */}
-          <div style={{ width: 320, display: "flex", flexDirection: "column", gap: 6 }}>
+          <div style={{ width: 400, display: "flex", flexDirection: "column", gap: 6 }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-              <span style={{ fontFamily: "'Orbitron', monospace", fontSize: "0.52rem", letterSpacing: "0.25em", color: "rgba(74,158,255,0.6)" }}>
+              <span style={{ fontFamily: "'Orbitron', monospace", fontSize: "0.7rem", letterSpacing: "0.25em", color: "rgba(74,158,255,0.6)" }}>
                 PLANETS UNLOCKED: {unlockedCount} / {UNLOCK_THRESHOLDS.length}
               </span>
               {progressPct < 100 && (
-                <span style={{ fontFamily: "'Orbitron', monospace", fontSize: "0.52rem", letterSpacing: "0.15em", color: "rgba(255,255,255,0.3)" }}>
+                <span style={{ fontFamily: "'Orbitron', monospace", fontSize: "0.7rem", letterSpacing: "0.15em", color: "rgba(255,255,255,0.3)" }}>
                   {nextThresholdLabel} TO NEXT
                 </span>
               )}
@@ -515,11 +515,11 @@ export default function App() {
               }} />
             </div>
             <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <span style={{ fontFamily: "'Orbitron', monospace", fontSize: "0.48rem", color: "rgba(255,255,255,0.2)", letterSpacing: "0.1em" }}>
+              <span style={{ fontFamily: "'Orbitron', monospace", fontSize: "0.9rem", color: "rgba(255,255,255,0.2)", letterSpacing: "0.1em" }}>
                 {formatTotalTime(Math.max(0, prevThreshold))}
               </span>
               {nextThreshold > 0 && (
-                <span style={{ fontFamily: "'Orbitron', monospace", fontSize: "0.48rem", color: "rgba(255,255,255,0.2)", letterSpacing: "0.1em" }}>
+                <span style={{ fontFamily: "'Orbitron', monospace", fontSize: "0.9rem", color: "rgba(255,255,255,0.2)", letterSpacing: "0.1em" }}>
                   {formatTotalTime(nextThreshold)}
                 </span>
               )}
