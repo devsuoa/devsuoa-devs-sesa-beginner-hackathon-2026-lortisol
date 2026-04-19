@@ -370,7 +370,7 @@ export default function App() {
         {/* Mode picker */}
         {isVisible && !mode && (
           <div className="flex flex-col items-center gap-6 mt-4">
-            <p className="font-[Orbitron] text-blue-400 tracking-widest text-sm">SELECT MODE</p>
+            <p className="font-[Orbitron] text-blue-400 text-xl tracking-widest text-sm font-bold">SELECT MODE:</p>
             <div className="flex gap-6">
               <button onClick={() => setMode("stopwatch")} className="mode-btn">STOPWATCH</button>
               <button onClick={() => setMode("pomodoro")} className="mode-btn">POMODORO</button>
